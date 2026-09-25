@@ -175,6 +175,8 @@
 
   @media (max-width: 760px) {
     .site-nav { display: none !important; }
+    .site-actions #lang-toggle,
+    .site-actions .header-cta { display: none !important; }
     .menu-toggle { display: inline-flex; }
     .mobile-nav { display: grid; }
   }
@@ -272,9 +274,9 @@
       <a href="#process" data-ru="Процесс" data-en="Process" style="padding:9px 16px;border-radius:999px;font-size:14px;color:#cfc7d6">Процесс</a>
       <a href="#team" data-ru="Команда" data-en="Team" style="padding:9px 16px;border-radius:999px;font-size:14px;color:#cfc7d6">Команда</a>
     </nav>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button type="button" id="lang-toggle" class="glass" style="padding:9px 15px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.03em;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#f4f1f6;cursor:pointer;font-family:'Space Grotesk',sans-serif">EN</button>
-      <a href="#contact" style="padding:11px 20px;border-radius:999px;background:linear-gradient(140deg,#efd2f5,#c08fd8);color:#1a1020;font-weight:600;font-size:14px;white-space:nowrap"><span class="cta-shimmer" data-ru="Обсудить проект" data-en="Start a project" data-text="Обсудить проект">Обсудить проект</span></a>
+    <div class="site-actions" style="display:flex;align-items:center;gap:10px">
+      <button type="button" id="lang-toggle" class="glass lang-toggle-btn" style="padding:9px 15px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.03em;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#f4f1f6;cursor:pointer;font-family:'Space Grotesk',sans-serif">EN</button>
+      <a href="#contact" class="header-cta" style="padding:11px 20px;border-radius:999px;background:linear-gradient(140deg,#efd2f5,#c08fd8);color:#1a1020;font-weight:600;font-size:14px;white-space:nowrap"><span class="cta-shimmer" data-ru="Обсудить проект" data-en="Start a project" data-text="Обсудить проект">Обсудить проект</span></a>
       <button type="button" id="menu-toggle" class="glass menu-toggle" aria-label="Меню" aria-expanded="false" aria-controls="mobile-nav">
         <span class="menu-toggle-bar"><span></span><span></span><span></span></span>
       </button>
@@ -286,6 +288,10 @@
     <a href="#services" data-ru="Услуги" data-en="Services">Услуги</a>
     <a href="#process" data-ru="Процесс" data-en="Process">Процесс</a>
     <a href="#team" data-ru="Команда" data-en="Team">Команда</a>
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 18px">
+      <button type="button" id="lang-toggle-mobile" class="lang-toggle-btn" style="padding:9px 15px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.03em;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:#f4f1f6;cursor:pointer;font-family:'Space Grotesk',sans-serif">EN</button>
+      <a href="#contact" style="flex:1;text-align:center;padding:11px 20px;border-radius:999px;background:linear-gradient(140deg,#efd2f5,#c08fd8);color:#1a1020;font-weight:600;font-size:14px;border-bottom:none" data-ru="Обсудить проект" data-en="Start a project">Обсудить проект</a>
+    </div>
   </nav>
 
   <section style="position:relative;max-width:1320px;margin:0 auto;padding:clamp(40px,7vw,90px) clamp(18px,5vw,64px) clamp(30px,5vw,60px)">
@@ -631,7 +637,8 @@
 
 // Переключатель RU / EN
 (function () {
-  var toggleBtn = document.getElementById("lang-toggle");
+  var toggleBtns = document.querySelectorAll(".lang-toggle-btn");
+  if (!toggleBtns.length) return;
   var currentLang = "ru";
   function applyLang(lang) {
     document.querySelectorAll("[data-ru]").forEach(function (el) {
@@ -641,11 +648,13 @@
       if (el.classList.contains("cta-shimmer")) el.setAttribute("data-text", val);
     });
     document.documentElement.setAttribute("lang", lang);
-    toggleBtn.textContent = lang === "en" ? "RU" : "EN";
+    toggleBtns.forEach(function (b) { b.textContent = lang === "en" ? "RU" : "EN"; });
     currentLang = lang;
   }
-  toggleBtn.addEventListener("click", function () {
-    applyLang(currentLang === "ru" ? "en" : "ru");
+  toggleBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      applyLang(currentLang === "ru" ? "en" : "ru");
+    });
   });
 })();
 
