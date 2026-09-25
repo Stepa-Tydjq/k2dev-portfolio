@@ -135,33 +135,43 @@
   }
   .menu-toggle-bar span {
     position: absolute;
+    top: 6px;
     left: 0;
     width: 100%;
     height: 2px;
     border-radius: 2px;
     background: currentColor;
-    transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease, top 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
   }
-  .menu-toggle-bar span:nth-child(1) { top: 0; }
-  .menu-toggle-bar span:nth-child(2) { top: 6px; }
-  .menu-toggle-bar span:nth-child(3) { top: 12px; }
-  .menu-toggle.is-open .menu-toggle-bar span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+  .menu-toggle-bar span:nth-child(1) { transform: translateY(-6px); }
+  .menu-toggle-bar span:nth-child(2) { transform: translateY(0); }
+  .menu-toggle-bar span:nth-child(3) { transform: translateY(6px); }
+  .menu-toggle.is-open .menu-toggle-bar span:nth-child(1) { transform: translateY(0) rotate(45deg); }
   .menu-toggle.is-open .menu-toggle-bar span:nth-child(2) { opacity: 0; }
-  .menu-toggle.is-open .menu-toggle-bar span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+  .menu-toggle.is-open .menu-toggle-bar span:nth-child(3) { transform: translateY(0) rotate(-45deg); }
 
+  /* position:absolute + opacity/transform only — never touches document
+     layout, so it stays smooth even while the particle canvas is animating. */
   .mobile-nav {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: clamp(18px,5vw,64px);
+    right: clamp(18px,5vw,64px);
+    z-index: 40;
     grid-template-columns: 1fr;
-    max-height: 0;
     opacity: 0;
-    overflow: hidden;
+    visibility: hidden;
     transform: translateY(-8px);
-    transition: max-height 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    transition: opacity 260ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 320ms;
   }
   .mobile-nav.is-open {
-    max-height: 320px;
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
+    transition: opacity 260ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
   }
   .mobile-nav a {
     display: block;
@@ -281,9 +291,8 @@
         <span class="menu-toggle-bar"><span></span><span></span><span></span></span>
       </button>
     </div>
-  </header>
 
-  <nav id="mobile-nav" class="glass mobile-nav" style="position:relative;margin:0 clamp(18px,5vw,64px) 0;border-radius:18px;background:rgba(12,10,16,0.92)">
+  <nav id="mobile-nav" class="glass mobile-nav" style="border-radius:18px;background:rgba(12,10,16,0.92)">
     <a href="#works" data-ru="Работы" data-en="Work">Работы</a>
     <a href="#services" data-ru="Услуги" data-en="Services">Услуги</a>
     <a href="#process" data-ru="Процесс" data-en="Process">Процесс</a>
@@ -293,6 +302,7 @@
       <a href="#contact" style="flex:1;text-align:center;padding:11px 20px;border-radius:999px;background:linear-gradient(140deg,#efd2f5,#c08fd8);color:#1a1020;font-weight:600;font-size:14px;border-bottom:none" data-ru="Обсудить проект" data-en="Start a project">Обсудить проект</a>
     </div>
   </nav>
+  </header>
 
   <section style="position:relative;max-width:1320px;margin:0 auto;padding:clamp(40px,7vw,90px) clamp(18px,5vw,64px) clamp(30px,5vw,60px)">
     <div class="t-stagger">
